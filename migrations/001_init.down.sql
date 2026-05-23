@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS audit_logs;
+DROP TABLE IF EXISTS sales;
+DROP TABLE IF EXISTS prescription_status;
+DROP TABLE IF EXISTS prescription_items;
+DROP TABLE IF EXISTS prescriptions;
+DROP TABLE IF EXISTS stock;
+DROP TABLE IF EXISTS medicines;
+DROP TABLE IF EXISTS users;
