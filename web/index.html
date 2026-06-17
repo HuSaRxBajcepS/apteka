@@ -1,67 +1,34 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Apteczny</title>
 
-    <link
-        rel="stylesheet"
-        href="/css/style.css"
-    >
-
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
-
     <div class="container">
-
         <div class="topbar">
-
             <h1>System Apteczny</h1>
 
-            <button
-                class="logout-btn"
-                onclick="logout()"
-            >
+            <button class="logout-btn" onclick="logout()">
                 Wyloguj
             </button>
-
         </div>
 
         <section>
-
             <h2>Logowanie</h2>
 
-            <input
-                id="email"
-                type="email"
-                placeholder="Email"
-            >
+            <input id="email" type="email" placeholder="Email">
+            <input id="password" type="password" placeholder="Hasło">
 
-            <input
-                id="password"
-                type="password"
-                placeholder="Hasło"
-            >
-
-            <button
-                onclick="login()"
-            >
+            <button onclick="login()">
                 Zaloguj
             </button>
-
         </section>
 
         <section>
-
             <h2>Pobierz receptę</h2>
 
             <input
@@ -70,40 +37,24 @@
                 placeholder="4 cyfrowy kod recepty"
             >
 
-            <button
-                onclick="getPrescription()"
-            >
+            <button onclick="getPrescription()">
                 Pobierz receptę
             </button>
 
-            <div
-                id="prescription"
-                class="grid"
-            >
-            </div>
-
+            <div id="prescription" class="grid"></div>
         </section>
 
         <section>
-
             <h2>Leki OTC</h2>
 
-            <button
-                onclick="loadOTC()"
-            >
+            <button onclick="loadOTC()">
                 Pokaż leki bez recepty
             </button>
 
-            <div
-                id="otc"
-                class="grid"
-            >
-            </div>
-
+            <div id="otc" class="grid"></div>
         </section>
 
         <section>
-
             <h2>Panel Lekarza</h2>
 
             <input
@@ -125,16 +76,12 @@
                 value="1"
             >
 
-            <button
-                onclick="createPrescription()"
-            >
+            <button onclick="createPrescription()">
                 Utwórz receptę
             </button>
-
         </section>
 
         <section>
-
             <h2>Panel Pracownika</h2>
 
             <input
@@ -161,60 +108,32 @@
                 placeholder="Kod recepty (opcjonalnie)"
             >
 
-            <button
-                onclick="sellMedicine()"
-            >
+            <button onclick="sellMedicine()">
                 Sprzedaj lek
             </button>
-
         </section>
 
         <section>
-
             <h2>Informacje o koncie</h2>
 
-            <div
-                id="roleBox"
-                class="role-box"
-            >
-
+            <div id="roleBox" class="role-box">
                 Niezalogowany
-
             </div>
-
         </section>
-
     </div>
 
     <script src="/js/login.js"></script>
-
     <script src="/js/patient.js"></script>
-
     <script src="/js/doctor.js"></script>
-
     <script src="/js/employee.js"></script>
 
     <script>
-
-        const role =
-            localStorage.getItem(
-                "role"
-            );
-
-        const roleBox =
-            document.getElementById(
-                "roleBox"
-            );
+        const role = localStorage.getItem("role");
+        const roleBox = document.getElementById("roleBox");
 
         if (role) {
-
-            roleBox.innerHTML =
-                `Zalogowany jako: <b>${role}</b>`;
-
+            roleBox.innerHTML = `Zalogowany jako: <b>${role}</b>`;
         }
-
     </script>
-
 </body>
-
 </html>

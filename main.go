@@ -75,25 +75,12 @@ func main() {
 	mux.Handle("/api/employee/sell", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.SellMedicine))))
 	mux.HandleFunc("/api/patient/prescription", patient.GetPrescription)
 	mux.HandleFunc("/api/patient/otc", patient.GetOTC)
-	mux.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./web/css"))))
-	mux.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./web/js"))))
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Println(
-			"PATH:",
-			r.URL.Path,
-		)
-		w.Header().Set(
-			"Content-Type",
-			"text/html; charset=utf-8",
-		)
-		http.ServeFile(
-			w,
-			r,
-			"./web/index.html",
-		)
-	},
-	)
-	server := &http.Server{Addr: cfg.Server.Host + ":" + cfg.Server.Port, Handler: mux}
+	fs := http.FileServer(http.Dir("./web"))
+	mux.Handle("/", fs)
+	server := &http.Server{
+		Addr:    cfg.Server.Host + ":" + cfg.Server.Port,
+		Handler: mux,
+	}
 	log.Println("running")
 	log.Fatal(server.ListenAndServe())
 }
