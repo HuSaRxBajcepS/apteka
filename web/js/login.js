@@ -80,3 +80,8 @@ function redirectLoggedUser() {
         window.location.href = panelForRole(role);
     }
 }
+window.login = login;
+window.register = register;
+window.logout = logout;
+window.requireRole = requireRole;
+window.redirectLoggedUser = redirectLoggedUser;

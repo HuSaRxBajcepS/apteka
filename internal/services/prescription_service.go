@@ -57,10 +57,10 @@ func (s *PrescriptionService) Validate(code string) (int, error) {
 		return 0, err
 	}
 	if completed {
-		return 0, fmt.Errorf("prescription completed")
+		return 0, fmt.Errorf("Lek wypisany")
 	}
 	if time.Now().After(expires) {
-		return 0, fmt.Errorf("expired")
+		return 0, fmt.Errorf("Przedawnione!")
 	}
 	return id, nil
 }

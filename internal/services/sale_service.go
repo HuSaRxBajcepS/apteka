@@ -29,7 +29,7 @@ func (s *SaleService) Sell(employeeID int, patientID *int, medicineID int, quant
 	var prescriptionID *int
 	if requires {
 		if prescriptionCode == nil {
-			return errors.New("prescription required")
+			return errors.New("Wymaga recepty")
 		}
 		id, err := s.Prescription.Validate(*prescriptionCode)
 		if err != nil {
@@ -58,7 +58,7 @@ func (s *SaleService) Sell(employeeID int, patientID *int, medicineID int, quant
 	if err != nil {
 		return err
 	}
-	go s.Audit.Log(employeeID, "sale created")
+	go s.Audit.Log(employeeID, "Sprzedane")
 
 	return nil
 }

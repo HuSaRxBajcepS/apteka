@@ -1,8 +1,15 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel lekarza - System Apteczny</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body data-role="doctor">
     <div class="container">
         <div class="topbar">
             <h1>Panel lekarza</h1>
-            <button onclick="logout()">Wyloguj</button>
+            <button class="logout-btn" onclick="logout()">Wyloguj</button>
         </div>
 
         <section>
@@ -11,13 +18,14 @@
             <input id="medicineId" type="number" placeholder="ID leku">
             <input id="quantity" type="number" placeholder="Ilość">
             <button onclick="createPrescription()">Utwórz receptę</button>
-            <div id="createdPrescription"></div>
+            <p id="createdPrescription" class="message"></p>
         </section>
     </div>
 
-    <script src="/js/login.js"></script>
-    <script src="/js/doctor.js"></script>
+    <script src="/js/login.js?v=3"></script>
+    <script src="/js/doctor.js?v=3"></script>
     <script>
         requireRole("doctor");
     </script>
 </body>
+</html>

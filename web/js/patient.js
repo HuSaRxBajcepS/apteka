@@ -1,45 +1,76 @@
-async function getPrescription() {
-    const code = document.getElementById("code").value;
-    const response = await fetch(`/api/patient/prescription?code=${code}`);
+function formatDate(value) {
+    if (!value) return "-";
+    return new Date(value).toLocaleDateString("pl-PL");
+}
+
+async function loadPatientPanel() {
+    await loadAccount();
+    await loadMyPrescriptions();
+}
+
+async function loadAccount() {
+    const token = localStorage.getItem("jwt");
+    const box = document.getElementById("account");
+
+    const response = await fetch("/api/patient/me", {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+
     if (!response.ok) {
-        alert("Nie znaleziono recepty");
+        box.textContent = "Nie udało się pobrać danych konta";
+        box.className = "error";
         return;
     }
-    const medicines = await response.json();
-    const box = document.getElementById("prescription");
+
+    const patient = await response.json();
+    box.innerHTML = `
+        <div class="card">
+            <h3>${patient.full_name}</h3>
+            <p>Email: ${patient.email}</p>
+            <p>ID pacjenta: ${patient.id}</p>
+        </div>
+    `;
+}
+
+async function loadMyPrescriptions() {
+    const token = localStorage.getItem("jwt");
+    const box = document.getElementById("prescriptions");
+    box.innerHTML = "Ładowanie...";
+
+    const response = await fetch("/api/patient/prescriptions", {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!response.ok) {
+        box.innerHTML = `<p class="error">Nie udało się pobrać recept</p>`;
+        return;
+    }
+
+    const prescriptions = await response.json();
     box.innerHTML = "";
-    medicines.forEach(medicine => {
+
+    if (!prescriptions || prescriptions.length === 0) {
+        box.innerHTML = `<p>Brak recept.</p>`;
+        return;
+    }
+
+    prescriptions.forEach(prescription => {
+        const medicines = (prescription.medicines || [])
+            .map(medicine => `<li>${medicine.name} — ilość: ${medicine.quantity}</li>`)
+            .join("");
+
         box.innerHTML += `
             <div class="card">
-                <h3>${medicine.name}</h3>
-
-                <p>
-                    Ilość:
-                    ${medicine.quantity}
-                </p>
+                <h3>Recepta ${prescription.code}</h3>
+                <p>ID: ${prescription.id}</p>
+                <p>Wystawiona: ${formatDate(prescription.created_at)}</p>
+                <p>Ważna do: ${formatDate(prescription.expires_at)}</p>
+                <p>Status: ${prescription.completed ? "Zrealizowana" : "Aktywna"}</p>
+                <ul>${medicines}</ul>
             </div>
         `;
     });
 }
 
-async function loadOTC() {
-    const response = await fetch("/api/patient/otc");
-    const medicines = await response.json();
-    const box = document.getElementById("otc");
-    box.innerHTML = "";
-    medicines.forEach(medicine => {
-        box.innerHTML += `
-            <div class="card">
-
-                <h3>
-                    ${medicine.name}
-                </h3>
-
-                <div class="price">
-                    ${medicine.price} PLN
-                </div>
-
-            </div>
-        `;
-    });
-}
+window.loadPatientPanel = loadPatientPanel;
+window.loadMyPrescriptions = loadMyPrescriptions;

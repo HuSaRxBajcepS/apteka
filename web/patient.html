@@ -1,8 +1,15 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel pacjenta - System Apteczny</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body data-role="patient">
     <div class="container">
         <div class="topbar">
             <h1>Panel pacjenta</h1>
-            <button onclick="logout()">Wyloguj</button>
+            <button class="logout-btn" onclick="logout()">Wyloguj</button>
         </div>
 
         <section>
@@ -13,14 +20,15 @@
         <section>
             <h2>Moje recepty</h2>
             <button onclick="loadMyPrescriptions()">Odśwież recepty</button>
-            <div id="prescriptions"></div>
+            <div id="prescriptions" class="grid"></div>
         </section>
     </div>
 
-    <script src="/js/login.js"></script>
-    <script src="/js/patient.js"></script>
+    <script src="/js/login.js?v=3"></script>
+    <script src="/js/patient.js?v=3"></script>
     <script>
         requireRole("patient");
         loadPatientPanel();
     </script>
 </body>
+</html>

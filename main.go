@@ -82,6 +82,7 @@ func main() {
 	mux.HandleFunc("/api/patient/otc", patient.GetOTC)
 	mux.Handle("/api/employee/medicines", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.GetMedicines))))
 	mux.Handle("/api/employee/stock", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.AddStock))))
+	mux.Handle("/api/employee/medicine", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.AddMedicine))))
 	mux.Handle("/api/patient/me", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("patient")(http.HandlerFunc(patient.Me))))
 	mux.Handle("/api/patient/prescriptions", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("patient")(http.HandlerFunc(patient.MyPrescriptions))))
 	fs := http.FileServer(http.Dir("./web"))

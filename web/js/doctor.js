@@ -3,43 +3,34 @@ async function createPrescription() {
     const patientID = Number(document.getElementById("patientId").value);
     const medicineID = Number(document.getElementById("medicineId").value);
     const quantity = Number(document.getElementById("quantity").value);
-    const response = await fetch("/api/doctor/create",{
-                method: "POST",
-                headers: {
-                    Authorization:
-                        `Bearer ${token}`,
-                    "Content-Type":
-                        "application/json"
-                },
-                body: JSON.stringify({
-                    patient_id:
-                        patientID,
-                    medicines: [
-                        {
-                            medicine_id:
-                                medicineID,
-                            quantity:
-                                quantity
-                        }
-                    ]
-                })
-            }
-        );
+    const message = document.getElementById("createdPrescription");
+
+    const response = await fetch("/api/doctor/create", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            patient_id: patientID,
+            medicines: [
+                {
+                    medicine_id: medicineID,
+                    quantity: quantity
+                }
+            ]
+        })
+    });
 
     if (!response.ok) {
-        alert("Błąd tworzenia recepty");
+        message.textContent = await response.text() || "Błąd tworzenia recepty";
+        message.className = "message error";
         return;
     }
 
     const result = await response.json();
-    alert(
-`Recepta utworzona
-
-ID:
-${result.id}
-
-Kod:
-${result.code}`
-    );
-
+    message.innerHTML = `Recepta utworzona. ID: <strong>${result.id}</strong>, kod: <strong>${result.code}</strong>`;
+    message.className = "message success";
 }
+
+window.createPrescription = createPrescription;

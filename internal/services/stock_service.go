@@ -23,7 +23,7 @@ func (s *StockService) Decrease(tx *sql.Tx, medicineID int, quantity int) error 
 		return err
 	}
 	if current < quantity {
-		return errors.New("insufficient stock")
+		return errors.New("Leku nie ma na stanie")
 	}
 	_, err = tx.Exec(`UPDATE stock SET quantity=quantity-$1 WHERE medicine_id=$2`, quantity, medicineID)
 	return err

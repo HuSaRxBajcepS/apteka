@@ -1,21 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel pracownika - System Apteczny</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body data-role="employee">
     <div class="container">
         <div class="topbar">
             <h1>Panel pracownika</h1>
-            <button onclick="logout()">Wyloguj</button>
+            <button class="logout-btn" onclick="logout()">Wyloguj</button>
         </div>
 
         <section>
             <h2>Dostępność leków</h2>
             <button onclick="loadMedicines()">Pokaż wszystkie leki</button>
-            <div id="medicines"></div>
+            <div id="medicines" class="grid"></div>
         </section>
 
         <section>
-            <h2>Dodaj lek do stanu</h2>
+            <h2>Dodaj nowy lek</h2>
+            <input id="newMedicineName" type="text" placeholder="Nazwa leku">
+            <input id="newMedicinePrice" type="number" step="0.01" placeholder="Cena">
+            <input id="newMedicineQuantity" type="number" placeholder="Ilość początkowa">
+            <select id="newMedicineRequires">
+                <option value="false">Bez recepty</option>
+                <option value="true">Wymaga recepty</option>
+            </select>
+            <button onclick="addMedicine()">Dodaj lek</button>
+            <p id="addMedicineMessage" class="message"></p>
+        </section>
+
+        <section>
+            <h2>Zwiększ stan istniejącego leku</h2>
             <input id="stockMedicineId" type="number" placeholder="ID leku">
             <input id="stockQuantity" type="number" placeholder="Ilość">
             <button onclick="addStock()">Dodaj do stanu</button>
+            <p id="stockMessage" class="message"></p>
         </section>
 
         <section>
@@ -23,15 +44,17 @@
             <input id="sellMedicineId" type="number" placeholder="ID leku">
             <input id="sellQuantity" type="number" placeholder="Ilość">
             <input id="sellPatient" type="number" placeholder="ID pacjenta opcjonalnie">
-            <input id="sellPrescription" placeholder="Kod recepty">
+            <input id="sellPrescription" placeholder="Kod recepty, jeśli wymagany">
             <button onclick="sellMedicine()">Sprzedaj lek</button>
+            <p id="sellMessage" class="message"></p>
         </section>
     </div>
 
-    <script src="/js/login.js"></script>
-    <script src="/js/employee.js"></script>
+    <script src="/js/login.js?v=3"></script>
+    <script src="/js/employee.js?v=3"></script>
     <script>
         requireRole("employee");
         loadMedicines();
     </script>
 </body>
+</html>
