@@ -64,8 +64,13 @@ func main() {
 		DB:   db,
 	}
 
-	patient := &handlers.PatientHandler{
+	patientService := &services.PatientService{
 		DB: db,
+	}
+
+	patient := &handlers.PatientHandler{
+		DB:      db,
+		Patient: patientService,
 	}
 
 	mux := http.NewServeMux()
@@ -75,6 +80,10 @@ func main() {
 	mux.Handle("/api/employee/sell", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.SellMedicine))))
 	mux.HandleFunc("/api/patient/prescription", patient.GetPrescription)
 	mux.HandleFunc("/api/patient/otc", patient.GetOTC)
+	mux.Handle("/api/employee/medicines", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.GetMedicines))))
+	mux.Handle("/api/employee/stock", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("employee")(http.HandlerFunc(employee.AddStock))))
+	mux.Handle("/api/patient/me", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("patient")(http.HandlerFunc(patient.Me))))
+	mux.Handle("/api/patient/prescriptions", middleware.Auth(cfg.JWTSecret)(middleware.RequireRole("patient")(http.HandlerFunc(patient.MyPrescriptions))))
 	fs := http.FileServer(http.Dir("./web"))
 	mux.Handle("/", fs)
 	server := &http.Server{

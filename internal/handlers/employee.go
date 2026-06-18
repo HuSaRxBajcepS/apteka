@@ -20,6 +20,11 @@ type SellRequest struct {
 	PrescriptionCode *string `json:"prescription_code"`
 }
 
+type AddStockRequest struct {
+	MedicineID int `json:"medicine_id"`
+	Quantity   int `json:"quantity"`
+}
+
 func (h *EmployeeHandler) SellMedicine(w http.ResponseWriter, r *http.Request) {
 	employeeID := r.Context().Value("userID").(int)
 	var req SellRequest
@@ -71,4 +76,35 @@ func (h *EmployeeHandler) GetMedicines(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(result)
+}
+
+func (h *EmployeeHandler) AddStock(w http.ResponseWriter, r *http.Request) {
+	var req AddStockRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	if req.MedicineID <= 0 || req.Quantity <= 0 {
+		http.Error(w, "invalid medicine_id or quantity", http.StatusBadRequest)
+		return
+	}
+
+	_, err = h.DB.Exec(`
+		INSERT INTO stock (medicine_id, quantity)
+		VALUES ($1, $2)
+		ON CONFLICT (medicine_id)
+		DO UPDATE SET quantity = stock.quantity + EXCLUDED.quantity
+	`, req.MedicineID, req.Quantity)
+
+	if err != nil {
+		http.Error(w, "db error", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "stock updated",
+	})
 }

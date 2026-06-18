@@ -4,10 +4,13 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+
+	"apteka/internal/services"
 )
 
 type PatientHandler struct {
-	DB *sql.DB
+	DB      *sql.DB
+	Patient *services.PatientService
 }
 
 func (h *PatientHandler) GetPrescription(w http.ResponseWriter, r *http.Request) {
@@ -54,4 +57,28 @@ func (h *PatientHandler) GetOTC(w http.ResponseWriter, r *http.Request) {
 		)
 	}
 	json.NewEncoder(w).Encode(result)
+}
+
+func (h *PatientHandler) Me(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("userID").(int)
+
+	patient, err := h.Patient.Me(userID)
+	if err != nil {
+		http.Error(w, "db error", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(patient)
+}
+
+func (h *PatientHandler) MyPrescriptions(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("userID").(int)
+
+	prescriptions, err := h.Patient.MyPrescriptions(userID)
+	if err != nil {
+		http.Error(w, "db error", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(prescriptions)
 }

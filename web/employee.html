@@ -1,0 +1,37 @@
+<body data-role="employee">
+    <div class="container">
+        <div class="topbar">
+            <h1>Panel pracownika</h1>
+            <button onclick="logout()">Wyloguj</button>
+        </div>
+
+        <section>
+            <h2>Dostępność leków</h2>
+            <button onclick="loadMedicines()">Pokaż wszystkie leki</button>
+            <div id="medicines"></div>
+        </section>
+
+        <section>
+            <h2>Dodaj lek do stanu</h2>
+            <input id="stockMedicineId" type="number" placeholder="ID leku">
+            <input id="stockQuantity" type="number" placeholder="Ilość">
+            <button onclick="addStock()">Dodaj do stanu</button>
+        </section>
+
+        <section>
+            <h2>Sprzedaż leku</h2>
+            <input id="sellMedicineId" type="number" placeholder="ID leku">
+            <input id="sellQuantity" type="number" placeholder="Ilość">
+            <input id="sellPatient" type="number" placeholder="ID pacjenta opcjonalnie">
+            <input id="sellPrescription" placeholder="Kod recepty">
+            <button onclick="sellMedicine()">Sprzedaj lek</button>
+        </section>
+    </div>
+
+    <script src="/js/login.js"></script>
+    <script src="/js/employee.js"></script>
+    <script>
+        requireRole("employee");
+        loadMedicines();
+    </script>
+</body>
